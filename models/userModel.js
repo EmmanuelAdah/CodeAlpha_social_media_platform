@@ -23,6 +23,22 @@ const userSchema = new mongoose.Schema({
         minlength: [4, 'Password must be at least 4 characters'],
         maxLength: [20, 'Password must be less than  20 characters'],
         select: false,
+    },
+    verified: {
+        type: Boolean,
+        default: false,
+    },
+    verificationCode: {
+        type: String,
+        select: false,
+    },
+    resetPasswordCode: {
+        type: String,
+        select: false,
+        default: null,
+        expires: 3600,
+    },
+    resetPasswordExpires: {
     }
 }, { timestamps: true });
 
