@@ -20,8 +20,6 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Password is required'],
         trim: true,
-        minlength: [4, 'Password must be at least 4 characters'],
-        maxLength: [20, 'Password must be less than  20 characters'],
         select: false,
     },
     verified: {
@@ -31,6 +29,7 @@ const userSchema = new mongoose.Schema({
     verificationCode: {
         type: String,
         select: false,
+        expires: 120000,
     },
     resetPasswordCode: {
         type: String,
@@ -38,8 +37,6 @@ const userSchema = new mongoose.Schema({
         default: null,
         expires: 3600,
     },
-    resetPasswordExpires: {
-    }
 }, { timestamps: true });
 
 module.exports = mongoose.model('User', userSchema);
