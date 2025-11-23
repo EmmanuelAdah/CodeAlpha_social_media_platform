@@ -17,13 +17,17 @@ const commentSchema = mongoose.Schema({
         minLength: 2,
         maxLength: 50,
     },
-    description: {
+    comment:  {
         type: String,
         required: [true, 'comment is required'],
         trim: true,
         minLength: 2,
         maxLength: 2000,
     },
+    like: {
+        type: Number,
+        default: 0,
+    }
 }, {timestamps: true });
 
 module.exports = mongoose.model('Comment', commentSchema);

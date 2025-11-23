@@ -1,5 +1,5 @@
 
-const { signupSchema, verificationCodeSchema} = require('../middlewares/validator');
+const { signupSchema, verificationCodeSchema} = require("../middlewares/validator");
 const { doHash, doValidation, hmacProcess} = require("../middlewares/hasher");
 const User = require("../models/userModel");
 const { generateToken, userDetails } = require("../middlewares/jwtGenerator");
@@ -75,7 +75,6 @@ exports.verificationEmail = async (req, res) => {
 
     try {
         const existingUser = await User.findOne({ email });
-
         if (!existingUser) {
             return res.status(404).json({ message: 'Not a verified user' });
         }
@@ -85,7 +84,7 @@ exports.verificationEmail = async (req, res) => {
             from: process.env.EMAIL_SENDER_ADDRESS,
             to: existingUser.email,
             subject: 'Verification code',
-            html: `<h3 xmlns="http://www.w3.org/1999/html">Your verification code is <strong>${verificationCode}</strong>.<br>Use this six digit code to reset your password</h3>`
+            html: `<h3 xmlns="http://www.w3.org/1999/html">Your verification code is <strong>${verificationCode}</strong>.<br>Use this six-digit code to reset your password</h3>`
         });
 
         if (sentMail.accepted.includes(existingUser.email)) {
@@ -93,7 +92,9 @@ exports.verificationEmail = async (req, res) => {
                 verificationCode,
                 process.env.HMAC_VERIFICATION_CODE_KEY
             );
+            existingUser.verificationCodeExpiry = Date.now() + 1000 * 60 * 2;
             await existingUser.save();
+
             return res.status(200).json({ message: 'Verification code sent successfully' });
         }
         return res.status(500).json({ message: 'Email not delivered' })
@@ -104,23 +105,41 @@ exports.verificationEmail = async (req, res) => {
 
 
 exports.verifyCode = async (req, res) => {
-    const { email, codeInput } = req.body;
+    const { email, providedCode } = req.body;
 
-    try{
-        const {error, value } = validationCodeSchema.validate({ email, codeInput });
+    try {
+        const { error } = verificationCodeSchema.validate({ email, providedCode });
         if (error)
             return res.status(400).send(error.details[0].message);
-
-        const existingUser = await User.findOne({ email }).select('+verificationCode');
-        const codeValue = codeInput.toString()
+        const existingUser = await User.findOne({ email }).select('+verificationCode +verificationCodeExpiry');
 
         if (!existingUser)
             return res.status(400).json({
                 success: false,
                 message: 'Invalid verification code'
             });
-        existingUser.createdAt.getTime()
+        if(existingUser.verificationCodeExpiry < Date.now())
+            return res.status(401).json({
+                success: false,
+                message: 'Invalid verification code. Try again!!'
+            });
+
+        const hashedCode = hmacProcess(
+            providedCode.toString(),
+            process.env.HMAC_VERIFICATION_CODE_KEY
+        )
+        if (hashedCode === existingUser.verificationCode && existingUser.verificationCodeExpiry < Date.now()) {
+            existingUser.isVerified = true;
+            existingUser.verificationCode = '';
+            await existingUser.save()
+
+            return res.status(200).json({
+                success: true,
+                message: 'Verification successful'
+            });
+        }
     } catch (err) {
         res.status(400).json(err.message);
     }
 }
+
