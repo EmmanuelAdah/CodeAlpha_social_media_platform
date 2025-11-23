@@ -6,21 +6,21 @@ const postSchema = mongoose.Schema({
         required: true,
         ref: 'User',
     },
-    title: {
+    body: {
         type: String,
-        required: [true, 'Title is required'],
+        required: [true, 'Post is required'],
         trim: true,
     },
     image: {
         type: String,
         required: false,
-
     },
-    description: {
-        type: String,
-        required: [true, 'Description is required'],
-        trim: true,
-    },
+    like: {
+        type: Number,
+        required: false,
+        default: 0,
+        min: 0,
+    }
 }, {timestamps: true });
 
 module.exports = mongoose.model('Post', postSchema);

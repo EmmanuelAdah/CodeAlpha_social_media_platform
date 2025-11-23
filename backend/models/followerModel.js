@@ -8,9 +8,10 @@ const followerModel = new mongoose.Schema({
         minlength: 3,
         maxlength: 200,
         unique: true,
-        trim: true
+        trim: true,
+        ref: "User",
     },
-    name: {
+    username: {
         type: String,
         required: [true, 'Name is required'],
         minLength: 2,
@@ -31,6 +32,6 @@ const followerModel = new mongoose.Schema({
         maxlength: 10000,
         trim: true
     },
-})
+}, {timestamps: true});
 
 module.exports = mongoose.model('Follower', followerModel);

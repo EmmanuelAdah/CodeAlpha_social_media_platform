@@ -45,6 +45,12 @@ const userSchema = new mongoose.Schema({
         default: null,
         expires: 3600,
     },
+    followers: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+        }
+    ]
 }, { timestamps: true });
 
 module.exports = mongoose.model('User', userSchema);
