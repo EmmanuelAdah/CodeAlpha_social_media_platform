@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 
-
 const followerModel = new mongoose.Schema({
     userId: {
         type: String,
@@ -16,13 +15,6 @@ const followerModel = new mongoose.Schema({
         required: [true, 'Name is required'],
         minLength: 2,
         maxLength: 50,
-        trim: true
-    },
-    description: {
-        type: String,
-        required: [true, 'Product description is required'],
-        minlength: 5,
-        maxlength: 10000,
         trim: true
     },
     image: {

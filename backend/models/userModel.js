@@ -24,7 +24,13 @@ const userSchema = new mongoose.Schema({
     },
     image: {
         type: String,
-        default: '',
+        default: 'https://upload.wikimedia.org/wikipedia/commons/b/b5/Windows_10_Default_Profile_Picture.svg',
+    },
+    gender: {
+        type: String,
+        required: false,
+        enum: ['male', 'female', 'other'],
+        default: 'other',
     },
     verified: {
         type: Boolean,
