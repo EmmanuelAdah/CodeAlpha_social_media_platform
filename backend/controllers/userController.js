@@ -1,11 +1,11 @@
-const { User } = require("../models/userModel");
+const User = require("../models/userModel");
 const cloudinary = require("../middlewares/cloudinaryConfig");
 
 
 exports.getUserById = async (req, res) => {
-    const id = req.params.id;
+    const { id } = req.params;
 
-    const existingUser = await User.findById({_id: id});
+    const existingUser = await User.findById(id);
     if (!existingUser)
         return res.status(404).json({message: 'User not found'});
 
@@ -23,7 +23,7 @@ exports.allUsers = async (req, res) => {
 exports.findByUsername = async (req, res) => {
     const { username } = req.params;
 
-    const existingUser = await User.findOne(username);
+    const existingUser = await User.findOne({username: username});
     if (!existingUser)
         return res.status(404).json({message: 'User not found'});
 
@@ -40,10 +40,9 @@ exports.findByEmail = async (req, res) => {
 }
 
 exports.updateImage = async (req, res) => {
-    const { id } = req.params;
-    const { filePath } = req.body;
+    const { userId, filePath } = req.body;
 
-    const existingUser = await User.findOne({_id: id});
+    const existingUser = await User.findOne({_id: userId});
     if (!existingUser)
         return res.status(404).json({message: 'User not found'});
 
