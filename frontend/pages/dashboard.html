@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Social Media Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles/dashboard.css">
+</head>
+
+<body>
+    <div class="header">
+        <div class="header-left" id="userHeader">
+            <img id="userImage" src="https://i.pravatar.cc/100" alt="User">
+            <div class="email" id="userEmail"></div>
+        </div>
+
+        <div class="header-right">
+            <button class="btn followers-btn" onclick="openFollowers()">👥 Followers</button>
+            <button class="btn logout-btn" onclick="logout()">🚪 Logout</button>
+        </div>
+    </div>
+
+<!-- FOLLOWERS POPUP -->
+<div class="overlay" id="overlay">
+    <div class="popup">
+        <h2 style="text-align:center;">Followers</h2>
+        <div id="followersList"></div>
+        <button class="btn logout-btn" style="width: 100%; margin-top: 10px;" onclick="closeFollowers()">Close</button>
+    </div>
+</div>
+
+<!-- POSTS -->
+<div class="container" id="postsContainer"></div>
+
+<script>
+// Dummy User
+const user = {
+    username: "john_doe",
+    email: "john.doe@example.com",
+    image: "https://i.pravatar.cc/150?img=12"
+};
+
+// Dummy Followers
+const followers = [
+    { username: "alex_king", email: "alex@example.com", image: "https://i.pravatar.cc/150?img=52" },
+    { username: "sarah.dev", email: "sarah@example.com", image: "https://i.pravatar.cc/150?img=33" },
+    { username: "markus", email: "markus@example.com", image: "https://i.pravatar.cc/150?img=10" }
+];
+
+// Dummy posts
+const posts = [
+    {
+        id: 1,
+        username: "alex_king",
+        userImage: "https://i.pravatar.cc/150?img=52",
+        createdAt: "Feb 12, 2025 • 3:45 PM",
+        body: ("This is a very long post meant to test scrolling... ").repeat(10),
+        likes: 2,
+        comments: [
+            { username: "alex_king", image: "https://i.pravatar.cc/150?img=52", text: "Great post!" },
+            { username: "sarah.dev", image: "https://i.pravatar.cc/150?img=33", text: "Welcome aboard!" }
+        ]
+    }
+];
+
+// Load user info
+document.getElementById("userEmail").textContent = user.email;
+document.getElementById("userImage").src = user.image;
+
+// Make header clickable → user's own profile
+document.getElementById("userHeader").onclick = () => {
+    window.location.href = `profile.html?user=${user.username}`;
+}
+
+/* ----- Followers popup ----- */
+function openFollowers() {
+    document.getElementById("overlay").style.display = "flex";
+}
+function closeFollowers() {
+    document.getElementById("overlay").style.display = "none";
+}
+
+// Followers clickable
+document.getElementById("followersList").innerHTML = followers.map(f =>
+    `<div class="follower" onclick="goToProfile('${f.username}')">
+        <img src="${f.image}" alt="">
+        <div>
+            <div><strong>${f.username}</strong></div>
+            <div>${f.email}</div>
+        </div>
+    </div>`
+).join("");
+
+function goToProfile(username) {
+    window.location.href = `profile.html?user=${username}`;
+}
+
+
+const container = document.getElementById("postsContainer");
+
+posts.forEach(post => {
+    const commentsHTML = post.comments.map(c => `
+        <div class="comment" onclick="goToProfile('${c.username}')">
+            <img src="${c.image}" alt="">
+            <div>
+                <div class="username">${c.username}</div>
+                <div>${c.text}</div>
+            </div>
+        </div>
+    `).join("");
+
+    const div = document.createElement("div");
+    div.className = "post";
+
+    div.innerHTML = `
+        <div class="post-header" onclick="goToProfile('${post.username}')">
+            <img src="${post.userImage}" alt="">
+            <div class="post-info">
+                <div class="post-username">${post.username}</div>
+                <div class="post-date">${post.createdAt}</div>
+            </div>
+        </div>
+
+        <div class="post-body">${post.body}</div>
+
+        <div class="post-actions">
+            <button class="like-btn" onclick="likePost(${post.id})">👍 Like (<span id="likes-${post.id}">${post.likes}</span>)</button>
+            <button class="comment-btn" onclick="toggleComments(${post.id})">💬 Comments</button>
+        </div>
+
+        <div class="comments" id="comments-${post.id}">
+            ${commentsHTML}
+        </div>
+    `;
+    container.appendChild(div);
+});
+
+/* ----- Like & comment handlers ----- */
+function toggleComments(id) {
+    const section = document.getElementById(`comments-${id}`);
+    section.style.display = section.style.display === "block" ? "none" : "block";
+}
+
+function likePost(id) {
+    const post = posts.find(p => p.id === id);
+    post.likes++;
+    document.getElementById(`likes-${id}`).textContent = post.likes;
+}
+
+function logout() {
+    alert("Logged out!");
+}
+</script>
+
+</body>
+</html>
