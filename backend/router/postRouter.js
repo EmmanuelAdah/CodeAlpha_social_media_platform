@@ -3,7 +3,8 @@ const router = express.Router();
 const postController = require('../controllers/postController');
 
 
-router.get('/get/:userId', postController.getAllPosts);
+router.get('/getAll', postController.getAllPosts);
+router.get('/get/:userId', postController.getPosts);
 router.post('/create', postController.createPost);
 router.get("/getByID/:id", postController.findById);
 router.delete('/delete/:id', postController.deletePost);
