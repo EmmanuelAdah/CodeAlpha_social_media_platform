@@ -51,30 +51,30 @@ exports.verificationCodeSchema = Joi.object({
 
 exports.postSchema = Joi.object({
     userId: Joi.string()
-        .required()
-        .min(3)
-        .max(100)
-        .pattern(/^[A-Za-z0-9_]+$/),
+        .length(24)
+        .hex()
+        .required(),
+
     body: Joi.string()
-        .required()
+        .trim()
         .min(1)
         .max(2000)
-        .trim()
-})
+        .required()
+});
 
 exports.commentSchema = Joi.object({
     userId: Joi.string()
-        .required()
         .min(1)
-        .max(100),
+        .max(100)
+        .required(),
 
     postId: Joi.string()
-        .required()
         .min(1)
-        .max(100),
+        .max(100)
+        .required(),
 
     comment: Joi.string()
-        .required()
         .min(1)
-        .max(2000),
+        .max(2000)
+        .required(),
 })
