@@ -54,6 +54,7 @@ exports.signup = async (req, res) => {
 
         const userResponse = {
             id: savedUser.id,
+            username: savedUser.username,
             email: savedUser.email
         };
         const token = await generateToken(userResponse);

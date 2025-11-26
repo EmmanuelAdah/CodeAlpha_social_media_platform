@@ -1,5 +1,6 @@
 const { postSchema } = require('../middlewares/validator');
-const { Post } = require('../models/postModel');
+const Post = require('../models/postModel');
+const User = require('../models/userModel');
 
 
 exports.getAllPosts = async (req, res) => {
@@ -10,21 +11,40 @@ exports.getAllPosts = async (req, res) => {
     return res.status(200).json(posts);
 }
 
+exports.getPosts = async (req, res) => {
+    const { userId } = req.params;
+
+    const existingUser = await User.findOne({ userId: userId });
+    if (!existingUser)
+        return res.status(404).json({message: 'User not found'});
+
+    const posts = await Post.find({userId: userId}).sort({createdAt: -1});
+    if(!posts)
+        return res.status(501).json({message: 'No posts found'});
+
+    return res.status(200).json(posts);
+}
 
 exports.createPost = async (req, res) => {
-    const { userId, postBody } = req.body;
+    const { userId, body } = req.body;
 
-    const response = postSchema.validate({userId, postBody});
+    const existingUser = await User.findById({_id: userId});
+    if (!existingUser)
+        return res.status(404).json({message: 'User not found'});
+
+    console.log(`The user ID: ${userId} and the body ${body}`)
+
+    const response = postSchema.validate({ userId: userId, body: body });
     if(!response.ok)
         return res.status(400).json(response.error);
 
     const savedUser = await Post.create({
         userId: userId,
-        body: postBody
+        body: body
     })
     if(!savedUser)
         return res.status(501).json({message: 'Post not created'});
-    return res.status(200).json(response);
+    return res.status(200).json(savedUser);
 }
 
 

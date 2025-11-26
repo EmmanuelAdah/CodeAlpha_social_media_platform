@@ -1,6 +1,6 @@
-const { Comment } = require('../models/commentModel');
-const { User } = require('../models/userModel');
-const { Post } = require('../models/postModel');
+const Comment = require('../models/commentModel');
+const User = require('../models/userModel');
+const Post = require('../models/postModel');
 const { commentSchema} = require("../middlewares/validator");
 
 exports.createComment = async (req, res) => {
@@ -90,5 +90,4 @@ exports.likeComment = async (req, res) => {
     comment.like += 1;
     const savedLike = await comment.save();
     return res.status(200).json(savedLike);
-
 }

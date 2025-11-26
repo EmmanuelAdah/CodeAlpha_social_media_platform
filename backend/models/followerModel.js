@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require('mongoose')
 
 const followerModel = new mongoose.Schema({
     userId: {
@@ -19,10 +19,8 @@ const followerModel = new mongoose.Schema({
     },
     image: {
         type: String,
-        required: [true, 'Product image is required'],
-        minlength: 5,
-        maxlength: 10000,
-        trim: true
+        default: 'https://upload.wikimedia.org/wikipedia/commons/b/b5/Windows_10_Default_Profile_Picture.svg',
+        trim: true,
     },
 }, {timestamps: true});
 
