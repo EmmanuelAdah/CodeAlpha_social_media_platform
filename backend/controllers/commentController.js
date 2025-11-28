@@ -12,7 +12,7 @@ exports.createComment = async (req, res) => {
             return res.status(400).json({message: error.message});
         }
         const existingUser = await User.findById({userId: userId});
-        if (existingUser)
+        if (!existingUser)
             return res.status(400).json({message: 'No user found'});
 
         const existingPost = await Post.findById({postId: postId});
