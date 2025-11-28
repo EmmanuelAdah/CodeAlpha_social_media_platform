@@ -5,15 +5,15 @@ const { mongoose } = require('mongoose');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const authRouter = require('./router/authRouter');
+const userRouter = require('./router/userRouter');
 const postRouter = require('./router/postRouter');
+const commentRouter = require('./router/commentRouter');
+const followerRouter = require('./router/followerRouter');
 const URI = process.env.MONGODB_URI;
 
 const app = express();
 
-app.use(cors({
-    origin: process.env.CLIENT_URL,
-    credentials: true
-}));
+app.use(cors());
 app.use(helmet());
 app.use(cookieParser());
 app.use(express.json());
@@ -25,7 +25,10 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use('/api/auth', authRouter);
-app.use('/', postRouter)
+app.use('/user', userRouter);
+app.use('/post', postRouter);
+app.use('/follower', followerRouter);
+app.use('/comment', commentRouter);
 
 // Server
 const PORT = process.env.PORT || 3000;

@@ -17,7 +17,7 @@ exports.signin = async (req, res) => {
     }
     const valid = await doValidation(password, existingUser.password);
     if (!valid) {
-        return res.status(401)
+        return res.status(400)
                     .json({'message':'Invalid email or password'});
     }
     const payload = {
@@ -33,7 +33,7 @@ exports.signup = async (req, res) => {
     const { username, email, gender, password } = req.body;
 
     try{
-     const {error} = signupSchema.validate({ username, email, gender: gender.toLowerCase(), password });
+     const {error} = signupSchema.validate({ username, email, gender, password });
 
         if(error){
              return res.status(400).send(error.details[0].message);
@@ -58,6 +58,7 @@ exports.signup = async (req, res) => {
             email: savedUser.email
         };
         const token = await generateToken(userResponse);
+        console.log(token);
         return await userDetails(token, res);
      } catch (err) {
         res.status(400).json(err.message);
@@ -126,7 +127,7 @@ exports.verifyCode = async (req, res) => {
                 message: 'Invalid verification code. Try again!!'
             });
 
-        const hashedCode = hmacProcess(
+        const hashedCode =  hmacProcess(
             providedCode.toString(),
             process.env.HMAC_VERIFICATION_CODE_KEY
         )

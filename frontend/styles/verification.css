@@ -12,6 +12,7 @@ body {
     border-radius: 10px;
     box-shadow: 0 3px 10px rgba(0,0,0,0.15);
     text-align: center;
+    display: none;
 }
 
 .verify-container input {
@@ -94,6 +95,58 @@ body {
 
 .verify-btn:hover {
     background: #2d52cc;
+}
+
+.confirmPassword {
+    display: flex;
+    width: 350px;
+    margin: 120px auto;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+    text-align: center;
+}
+.password-inputs {
+    display: block;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+    line-height: 1.5;
+}
+
+.password-inputs input {
+    width: 90%;
+    height: 35px;
+    font-size: 16px;
+    margin-top: 15px;
+    padding: 0 10px;
+}
+
+.confirm-container {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: none;
+    background: #ffffff;
+    color: #1b0f62;
+    cursor: pointer;
+}
+
+.confirm-container button {
+    width: 90%;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 8px;
+    margin: 10px 0 20px;
+    border: none;
+    color: white;
+    background: #3b6cff;
+}
+ button:hover {
+    background: #3b2f88;
+    cursor: pointer;
 }
 
 .close-btn {
