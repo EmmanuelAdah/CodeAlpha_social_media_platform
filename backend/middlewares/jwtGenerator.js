@@ -11,13 +11,13 @@ exports.generateToken = async (payload) =>{
 exports.userDetails = async (token, res) =>{
     return await res.cookie(
                     'Authorization', 'Bearer ' + token,
-                    { expires: new Date(Date.now() + 1000 * 60 * 60 + 24),
+                    { expires: new Date(Date.now() + 1000 * 60 * 60 + 6),
                     httpOnly: process.env.NODE_ENV === 'production',
                     secure: process.env.NODE_ENV === 'production'
                     })
                 .json({
                     success: true,
-                    user: token,
-                    message: 'User logged in successfully'
+                    token: token,
+                    message: 'Login successful...'
                 });
 }
