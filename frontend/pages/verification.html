@@ -19,7 +19,7 @@
 <div class="overlay" id="popupOverlay">
     <div class="popup">
         <h3>Enter Verification Code</h3>
-        <p>6-digit code was sent to your email.</p>
+        <p>A 6-digit code was sent to your email.</p>
 
         <div class="code-inputs">
             <input type="text" maxlength="1" class="code" disabled>
@@ -32,6 +32,18 @@
 
         <button class="verify-btn" id="verifyBtn" onclick="verifyCode()">Verify</button>
         <button class="close-btn" onclick="closePopup()">Close</button>
+    </div>
+</div>
+
+<div class="confirmPassword" id="confirmPassword">
+    <div class="confirm-container">
+        <h2>Reset Password</h2>
+        <label>Enter your new password</label>
+        <div class="password-inputs">
+            <input type="password" id="new-password" placeholder="New password">
+            <input type="password" id="confirm-password" placeholder="Confirm new password">
+        </div>
+        <button type="submit" onclick="verifyNewPassword()">Submit</button>
     </div>
 </div>
 
