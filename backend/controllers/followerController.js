@@ -17,7 +17,6 @@ exports.createFollower = async (req, res) => {
         email: existingUser.email,
         image: existingUser.image,
     });
-    console.log(value);
 
     if (error)
         return res.status(400).json({message: error.message});
