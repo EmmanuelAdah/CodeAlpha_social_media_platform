@@ -93,7 +93,7 @@ The backend is built on **Node.js** and **Express**, while the frontend uses **H
 ### 1️⃣ Clone the repository
 
 ```sh
-git clone https://github.com/your-username/your-repo.git
+git clone https://github.com/EmmanuelAdah/CodeAlpha_social_media_platform.git
 cd your-repo
 ```
 
